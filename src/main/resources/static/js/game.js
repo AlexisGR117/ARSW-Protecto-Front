@@ -57,22 +57,22 @@ const app = (function () {
 
     function connectAndSubscribe() {
         console.info('Connecting to WS...');
-        const socket = new SockJS('https://paintitgame.azurewebsites.net/stompendpoint');
+        const socket = new SockJS('paintitgame.azurewebsites.net/stompendpoint');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             stompClient.subscribe(`/topic/updatescore.${idGame}`, (eventbody) => {
                 const players = JSON.parse(eventbody.body);
                 createPlayersElements(players);
-            }, { withCredentials: false });
+            });
             stompClient.subscribe(`/topic/updateboard.${idGame}`, (eventbody) => {
                 const data = JSON.parse(eventbody.body);
                 paintCell(data);
-            }, { withCredentials: false });
+            });
             stompClient.subscribe(`/topic/gamefinished.${idGame}`, (eventbody) => {
                 const winner = eventbody.body;
                 placeWinner(winner);
-            }, { withCredentials: false });
+            });
         });
     }
 
