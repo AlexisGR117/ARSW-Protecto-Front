@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Tablero de juego</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+    <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <link href="css/app.css" rel="stylesheet"/>
+    <link href="css/game.css" rel="stylesheet"/>
+    <script src="js/apiclient.js"></script>
+    <script src="js/game.js"></script>
+</head>
+<body onload="app.init()">
+    <main id="texture" class="center-content">
+        <div>
+            <div id="game-row" class="row gap-3">
+                <div id="score-table" class="col content">
+                    <h4 class="tittle">Tabla de puntuaciones</h4>
+                    <div id="players" class="col gap-3"></div>
+                </div>
+                <div id="game" class="col content">
+                    <h3 class="tittle">Tiempo restante: <span id="time"></span></h3>
+                    <h3 class="time-message" id="message" style="visibility: hidden;">¡Se acaba el tiempo!</h3>
+                    <div id="game-board" class="col-md-12"></div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="modal fade" id="winnerModalCenter" tabindex="-1" aria-labelledby="winnerModalCenterTitle" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="dialog-confirm modal-content">
+                <div class="modal-header">
+                    <h1 class="title">Fin del juego</h1>
+                </div>
+                <div id="winner" class="dialog-body modal-body"></div>
+                <div class="modal-footer">
+                    <button type="button" class="button btn btn-primary" onclick="app.exit()"><strong >SALIR</strong></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

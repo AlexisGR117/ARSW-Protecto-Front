@@ -1,0 +1,22 @@
+.avatar-color-content {
+    border: 4px solid #ffffff;
+    border-radius: 50%;
+    width: 9rem;
+    height: 9rem;
+    position: relative;
+}
+
+.avatar-color {
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(6%, 6%);
+    border-radius: 50%;
+    background: red;
+    width: 7.6rem;
+    height: 7.6rem;
+}
+
+.nickname {
+    color: #ffffff;
+}

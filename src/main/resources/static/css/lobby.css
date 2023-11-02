@@ -1,0 +1,20 @@
+.circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: 4px solid #012442a5;
+    margin: 0.3rem;
+}
+
+.player {
+    font-weight: bold;
+    text-transform: uppercase;
+    border-radius: 100px 25px 25px 100px;
+    background-color: #FFFFFFB3;
+    color: #301A6B;
+}
+
+.empty {
+    background-color: #FFFFFF66;
+    color: #301A6B;
+}

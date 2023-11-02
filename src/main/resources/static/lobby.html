@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Sala de espera</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+    <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <link href="css/app.css" rel="stylesheet"/>
+    <link href="css/lobby.css" rel="stylesheet"/>
+    <script src="js/apiclient.js"></script>
+    <script src="js/lobby.js"></script>
+</head>
+<body onload="app.init()">
+    <main id="texture" class="center-content">
+        <div class="content">
+            <h1 class="tittle">Sala de espera</h1>
+            <h3 id="time" class="col-md center-content tittle time">Tiempo de la partida: 01:30 minutos</h3>
+            <div id="players-row" class="content row">
+                <div id="players-list" class="col d-flex flex-column gap-3"></div>
+            </div>
+            <h3 id="number-players" class="tittle col p-3"></h3>
+            <div id="botones" class="d-flex col-md">
+                <div class="col d-none">
+                    <button id="leave" type="button" class="button btn">
+                        <i class="bi bi-caret-left-fill"></i><strong>SALIR</strong>
+                    </button>
+                </div>
+                <div class="col">
+                    <div id="dialog-alert"></div>
+                    <button id="start" class="button btn disabled">
+                        <i class="bi bi-joystick"></i><strong >COMENZAR</strong>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div class="modal fade" id="startGameModalCenter" tabindex="-1" aria-labelledby="startGameModalCenterTitle" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="dialog-confirm modal-content">
+                <div class="modal-header">
+                    <h1 class="title">Iniciar juego</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="dialog-body modal-body">
+                    <p>Desea comenzar el juego?</p>
+                </div>
+                <div id="start-dialog" class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
