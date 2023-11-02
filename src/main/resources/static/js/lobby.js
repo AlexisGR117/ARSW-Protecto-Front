@@ -45,10 +45,10 @@ const app = (function () {
                 const players = JSON.parse(eventbody.body);
                 createPlayersElements(players);
                 $("#number-players").text(`Jugadores ${players.length}/4`);
-            });
+            }, { withCredentials: false });
             stompClient.subscribe(`/topic/startgame.${gameCode}`, (eventbody) => {
                 location.href = "game.html";
-            });
+            }, { withCredentials: false });
 
         });
     };
