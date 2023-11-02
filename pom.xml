@@ -12,7 +12,7 @@
     <groupId>edu.eci.arsw</groupId>
     <artifactId>paintit</artifactId>
     <version>0.0.1</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>paintit</name>
     <description>Proyecto de desarrollo del curso ARSW PaintIt</description>
     <properties>
