@@ -64,15 +64,15 @@ const app = (function () {
             stompClient.subscribe(`/topic/updatescore.${idGame}`, (eventbody) => {
                 const players = JSON.parse(eventbody.body);
                 createPlayersElements(players);
-            });
+            }, { withCredentials: false });
             stompClient.subscribe(`/topic/updateboard.${idGame}`, (eventbody) => {
                 const data = JSON.parse(eventbody.body);
                 paintCell(data);
-            });
+            }, { withCredentials: false });
             stompClient.subscribe(`/topic/gamefinished.${idGame}`, (eventbody) => {
                 const winner = eventbody.body;
                 placeWinner(winner);
-            });
+            }, { withCredentials: false });
         });
     }
 
