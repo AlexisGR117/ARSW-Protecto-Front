@@ -50,7 +50,6 @@ const app = (function () {
             stompClient.subscribe(`/topic/startgame.${gameCode}`, (eventbody) => {
                 location.href = "game.html";
             });
-            });
         });
     };
 
