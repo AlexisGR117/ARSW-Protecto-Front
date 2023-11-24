@@ -1,8 +1,8 @@
 const apiClient = (function () {
-    const baseURL = "https://paintitgame.azurewebsites.net";
+
     var _getPlayersByGame = function (gameCode) {
         let getPromise = $.ajax({
-            url: baseURL + "/games/" + gameCode + "/players",
+            url: "/games/" + gameCode + "/players",
             type: "GET",
             contentType: "application/json",
             dataType: "json",
@@ -14,7 +14,7 @@ const apiClient = (function () {
 
     var _postGame = function (gameCode) {
         let postPromise = $.ajax({
-            url: baseURL + "/games",
+            url: "/games",
             type: "POST",
             data: gameCode,
         });
@@ -33,7 +33,7 @@ const apiClient = (function () {
     var _postPlayer = function (gameCode, player) {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: baseURL + "/games/" + gameCode + "/players",
+                url: "/games/" + gameCode + "/players",
                 type: "POST",
                 data: JSON.stringify(player),
                 contentType: "application/json",
@@ -50,7 +50,7 @@ const apiClient = (function () {
     return {
         getPlayersByGameApp: function (idGame) {
             return new Promise(function (resolve, reject) {
-                $.get(baseURL + "/games/" + idGame + "/players", function (data) {
+                $.get("/games/" + idGame + "/players", function (data) {
                     resolve(data);
                 }).fail(function (error) {
                     reject(error);
@@ -60,7 +60,7 @@ const apiClient = (function () {
 
         getGame: function (idGame) {
             return new Promise(function (resolve, reject) {
-                $.get(baseURL + "/games/" + idGame, function (data) {
+                $.get("/games/" + idGame, function (data) {
                     resolve(data);
                 }).fail(function (error) {
                     reject(error);
@@ -75,7 +75,7 @@ const apiClient = (function () {
         postPlayerApp: function (gameCode, player) {
             return new Promise(function (resolve, reject) {
                 $.ajax({
-                    url: baseURL + "/games/" + gameCode + "/players",
+                    url: "/games/" + gameCode + "/players",
                     type: "POST",
                     data: JSON.stringify(player),
                     contentType: "application/json",

@@ -33,11 +33,55 @@ const app = (function () {
     }
 
     function paintCell(data) {
-        const newCell = $(`#row-${data.movement.x}-column-${data.movement.y}`);
+        const player = data.players.find((player) => player.name === data.playerName);
+        const x = data.movement.x;
+        const y = data.movement.y;
+        const newCell = $(`#row-${x}-column-${y}`);
         const playerCircle =  $(`#${data.playerName}`);
-        const parent = playerCircle.parents().first();
-        newCell.css('background-color', parent.css('background-color'));
+        const color = getRGBAColor(player.color);
+        newCell.css('background-color', color);
         playerCircle.appendTo(newCell);
+        const cells = data.cells;
+        if (data.wildcard == "PaintPump") {
+            for (let dc = -2; dc <= 2; dc++) for (let dr = -2; dr <= 2; dr++) {
+                if (isInsideBoard(y+dr, x+dc, cells.length) && cells[x+dc][y+dr].paintedBy != null && cells[x+dc][y+dr].paintedBy.name == data.playerName) {
+                    $(`#row-${x+dc}-column-${y+dr}`).css('background-color', color);
+                }
+            }
+            newCell.find("img").remove();
+        } else if (data.wildcard == "Freeze") {
+            for (const player of data.players) {
+                if(player.name != data.playerName) {
+                    $(`#${player.name}`).css('border-radius', "0%");
+                }
+            }
+            setInterval(unfreeze, 5000, data.players, data.playerName);
+            newCell.find("img").remove();
+        }
+    }
+
+    function isInsideBoard(x, y, size) {
+        return 0 <= x && x < size && 0 <= y && y < size;
+    }
+
+    function unfreeze(players, playerName) {
+        for (const player of players) {
+            if(player.name != playerName) {
+                $(`#${player.name}`).css('border-radius', "50%");
+            }
+        }
+    }
+
+    function placeWildcards(cells) {
+        for (const cell of cells) {
+            const cellBoard = $(`#row-${cell.x}-column-${cell.y}`);
+            if (cellBoard.children().length === 0) {
+                cellBoard.prepend(`<img class="wildcard ${cell.wildcard.type}" src="img/${cell.wildcard.type}.png">`);
+            } else if (cellBoard.children().length === 1 && cellBoard.children().first().is("img") && !cellBoard.children().first().hasClass(`${cell.wildcard.type}`)) {
+                cellBoard.empty();
+                cellBoard.prepend(`<img class="wildcard ${cell.wildcard.type}" src="img/${cell.wildcard.type}.png">`);
+            }
+        }
     }
 
     function placeWinner(winner) {
@@ -57,7 +101,7 @@ const app = (function () {
 
     function connectAndSubscribe() {
         console.info('Connecting to WS...');
-        const socket = new SockJS('https://paintitgame.azurewebsites.net/stompendpoint');
+        const socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
         stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
@@ -73,6 +117,10 @@ const app = (function () {
                 const winner = eventbody.body;
                 placeWinner(winner);
             });
+            stompClient.subscribe(`/topic/updatewildcards.${idGame}`, (eventbody) => {
+                const cells = JSON.parse(eventbody.body);
+                placeWildcards(cells);
+            });
         });
     }
 
@@ -87,7 +135,11 @@ const app = (function () {
         const data = {
             playerName: currentPlayer.name,
             movement: { x, y },
+            wildcard: null
         };
+        const cell = $(`#row-${x}-column-${y}`);
+        if (cell.children().first().hasClass("Freeze")) data.wildcard = "Freeze";
+        else if (cell.children().first().hasClass("PaintPump")) data.wildcard = "PaintPump";
         stompClient.send("/app/newmovement." + idGame, {}, JSON.stringify(data));
     }
 
@@ -117,7 +169,7 @@ const app = (function () {
     }
 
     function createBoard(game) {
-        const size = game.board.cells.length;
+        const size = game.cells.length;
         const board = $("#game-board");
         board.css("gridTemplateRows", `repeat(${size}, ${100 / size}%)`);
         board.css("gridTemplateColumns", `repeat(${size}, ${100 / size}%)`);
@@ -125,7 +177,7 @@ const app = (function () {
             for (let j = 0; j < size; j++) {
                 const cell = $('<div>').addClass(['cell', 'center-content']);
                 cell.attr("id", `row-${i}-column-${j}`)
-                const player = game.board.cells[i][j].paintedBy;
+                const player = game.cells[i][j].paintedBy;
                 if (player != null) cell.css("background-color", getRGBAColor(player.color));
                 board.append(cell);
             }

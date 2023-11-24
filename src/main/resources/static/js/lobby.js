@@ -37,12 +37,11 @@ const app = (function () {
 
     function connectAndSubscribe() {
         console.info('Connecting to WS...');
-        var socket = new SockJS('https://paintitgame.azurewebsites.net/stompendpoint');
+        const socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
-        console.log("---------------");
-        stompClient.connect({}, function (frame) {
+        stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
-           stompClient.subscribe(`/topic/newplayer.${gameCode}`, (eventbody) => {
+            stompClient.subscribe(`/topic/newplayer.${gameCode}`, (eventbody) => {
                 const players = JSON.parse(eventbody.body);
                 createPlayersElements(players);
                 $("#number-players").text(`Jugadores ${players.length}/4`);
@@ -50,6 +49,7 @@ const app = (function () {
             stompClient.subscribe(`/topic/startgame.${gameCode}`, (eventbody) => {
                 location.href = "game.html";
             });
+
         });
     };
 

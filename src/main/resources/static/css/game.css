@@ -43,3 +43,8 @@ body {
     color: #ff9d5c;
     text-shadow: 3px 3px #570524;
 }
+
+.wildcard {
+    height: 100%;
+    width: 100%;
+}
