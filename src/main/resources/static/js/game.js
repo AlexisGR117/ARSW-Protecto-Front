@@ -1,7 +1,7 @@
 const app = (function () {
     const module = apiClient;
     let stompClient = null;
-    const idGame = 1;
+    let gameCode = sessionStorage.getItem("gameCode")
     let currentPlayer = {name: sessionStorage.getItem('player')};
 
     function createPlayerElement(player) {
@@ -105,19 +105,19 @@ const app = (function () {
         stompClient = Stomp.over(socket);
         stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
-            stompClient.subscribe(`/topic/updatescore.${idGame}`, (eventbody) => {
+            stompClient.subscribe(`/topic/updatescore.${gameCode}`, (eventbody) => {
                 const players = JSON.parse(eventbody.body);
                 createPlayersElements(players);
             });
-            stompClient.subscribe(`/topic/updateboard.${idGame}`, (eventbody) => {
+            stompClient.subscribe(`/topic/updateboard.${gameCode}`, (eventbody) => {
                 const data = JSON.parse(eventbody.body);
                 paintCell(data);
             });
-            stompClient.subscribe(`/topic/gamefinished.${idGame}`, (eventbody) => {
+            stompClient.subscribe(`/topic/gamefinished.${gameCode}`, (eventbody) => {
                 const winner = eventbody.body;
                 placeWinner(winner);
             });
-            stompClient.subscribe(`/topic/updatewildcards.${idGame}`, (eventbody) => {
+            stompClient.subscribe(`/topic/updatewildcards.${gameCode}`, (eventbody) => {
                 const cells = JSON.parse(eventbody.body);
                 placeWildcards(cells);
             });
@@ -140,7 +140,7 @@ const app = (function () {
         const cell = $(`#row-${x}-column-${y}`);
         if (cell.children().first().hasClass("Freeze")) data.wildcard = "Freeze";
         else if (cell.children().first().hasClass("PaintPump")) data.wildcard = "PaintPump";
-        stompClient.send("/app/newmovement." + idGame, {}, JSON.stringify(data));
+        stompClient.send("/app/newmovement." + gameCode, {}, JSON.stringify(data));
     }
 
     function keyDownEvents() {
@@ -207,7 +207,7 @@ const app = (function () {
 
     function init() {
         connectAndSubscribe();
-        module.getGame(idGame)
+        module.getGame(gameCode)
             .then((game) => {
                 console.log(game.players);
                 createBoard(game);

@@ -86,7 +86,17 @@ const app = (function () {
         startDialog.append(startButton);
         $("#startGameModalCenter").modal('show');
     };
+
+    function setTime(remainingTime) {
+        const minutes = Math.floor(remainingTime / 60);
+        const seconds = remainingTime % 60;
+        $('#time').text(`: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+    };
     
+    function setCodeRoom() {
+        $("#codeRoom").text(`:  ${gameCode}`);
+    };
+
     function init() {
         setParameters();
         connectAndSubscribe();
@@ -100,6 +110,11 @@ const app = (function () {
                 }
                 $("#number-players").text(`Jugadores ${players.length}/4`);
             });
+
+        module.getGame(gameCode).then((game) => {
+            setTime(game.duration);
+            setCodeRoom();
+        });
 
         $("#start").click(function () {
             module.getPlayersByGameApp(gameCode)

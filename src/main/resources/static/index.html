@@ -15,16 +15,17 @@
     <link href="css/normalize.css" rel="stylesheet">
     <link rel="stylesheet" href="css/app.css">
     <link href="css/index.css" rel="stylesheet"/>
+    <script src="js/apiclient.js"></script>
 </head>
-<body>
+<body onload="index.init()">
     <main id="texture" class="center-content">
         <section class="container content text-center">
             <img src="../img/logo.png" alt="PainItLogo">
             <div class="container text-center">
                 <div class="row gap-3 align-items-center">
-                    <div class="col content content-height d-none flex-column justify-content-center">
+                    <div class="col content content-height flex-column justify-content-center">
                         <h4 class="tittle">CREA UNA NUEVA SALA PARA JUGAR CON TUS AMIGOS</h4>
-                        <button class="button btn">
+                        <button id="createBtn" class="button btn">
                             <i class="bi bi-sliders"></i><strong>CREAR SALA</strong>
                         </button>
                     </div>
@@ -40,5 +41,19 @@
         </section>
     </main>
     <script src="js/index.js"></script>
+    <div class="modal fade" id="joinGameModalCenter" tabindex="-1" aria-labelledby="joinGameModalCenterTitle" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="dialog-confirm modal-content">
+                <div class="modal-header">
+                    <h1 class="title">Código Inválido</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="dialog-body modal-body">
+                    <p>Verifica con tu amigo el código de la sala</p>
+                </div>
+                <div id="code-dialog" class="modal-footer"></div>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

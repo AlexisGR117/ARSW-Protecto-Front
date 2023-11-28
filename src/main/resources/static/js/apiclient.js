@@ -1,10 +1,8 @@
 const apiClient = (function () {
 
-    const baseURL = "https://paintitgame.azurewebsites.net";
-
     var _getPlayersByGame = function (gameCode) {
         let getPromise = $.ajax({
-            url: baseURL + "/games/" + gameCode + "/players",
+            url: "/games/" + gameCode + "/players",
             type: "GET",
             contentType: "application/json",
             dataType: "json",
@@ -14,28 +12,54 @@ const apiClient = (function () {
         return getPromise;
     };
 
-    var _postGame = function (gameCode) {
-        let postPromise = $.ajax({
-            url: baseURL + "/games",
-            type: "POST",
-            data: gameCode,
+    var _getGames = function () {
+        let getPromise = $.ajax({
+            url: "/games",
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
         });
 
-        postPromise.then(
-            function () {
-                alert("Juego creado con exito");
-            },
-            function () {
-                alert("No se pudo crear el juego");
-            },
-        );
+        return getPromise;
+    };
+
+    var _getGameBoardSizes = function () {
+        let getPromise = $.ajax({
+            url: "/games/boardsizes",
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
+        });
+
+        return getPromise;
+    };
+
+    var _getGameTimes = function () {
+        let getPromise = $.ajax({
+            url: "/games/gametimes",
+            type: "GET",
+            contentType: "application/json",
+            dataType: "json",
+        });
+
+        return getPromise;
+    };
+
+    var _postGame = function (gameConfig) {
+        let postPromise = $.ajax({
+            url: "/games",
+            type: "POST",
+            data: JSON.stringify(gameConfig),
+            contentType: "application/json",
+        });
+        
         return postPromise;
     };
 
     var _postPlayer = function (gameCode, player) {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: baseURL + "/games/" + gameCode + "/players",
+                url: "/games/" + gameCode + "/players",
                 type: "POST",
                 data: JSON.stringify(player),
                 contentType: "application/json",
@@ -52,7 +76,7 @@ const apiClient = (function () {
     return {
         getPlayersByGameApp: function (idGame) {
             return new Promise(function (resolve, reject) {
-                $.get(baseURL + "/games/" + idGame + "/players", function (data) {
+                $.get("/games/" + idGame + "/players", function (data) {
                     resolve(data);
                 }).fail(function (error) {
                     reject(error);
@@ -62,7 +86,7 @@ const apiClient = (function () {
 
         getGame: function (idGame) {
             return new Promise(function (resolve, reject) {
-                $.get(baseURL + "/games/" + idGame, function (data) {
+                $.get("/games/" + idGame, function (data) {
                     resolve(data);
                 }).fail(function (error) {
                     reject(error);
@@ -70,14 +94,18 @@ const apiClient = (function () {
             });
         },
 
-        postGameApp: function (gameCode) {
-            return _postGame(gameCode);
+        getGames: function () {
+            return _getGames();
+        },
+
+        postGameApp: function (gameConfig) {
+            return _postGame(gameConfig);
         },
 
         postPlayerApp: function (gameCode, player) {
             return new Promise(function (resolve, reject) {
                 $.ajax({
-                    url: baseURL + "/games/" + gameCode + "/players",
+                    url: "/games/" + gameCode + "/players",
                     type: "POST",
                     data: JSON.stringify(player),
                     contentType: "application/json",
@@ -89,6 +117,14 @@ const apiClient = (function () {
                     }
                 });
             });
+        },
+
+        getGameBoardSizes: function () {
+            return _getGameBoardSizes();
+        },
+
+        getGameTimes: function () {
+            return _getGameTimes();
         },
     };
 })();

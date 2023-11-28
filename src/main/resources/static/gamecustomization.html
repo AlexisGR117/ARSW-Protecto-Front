@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <title>Perzonalizar jugador</title>
+    <meta charset="UTF-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
+    <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
+    <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script> -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <link href="css/normalize.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/app.css">
+    <link href="css/gamecustomization.css" rel="stylesheet" />
+    <script src="js/apiclient.js"></script>
+    <script src="js/gamecustomization.js"></script>
+</head>
+<body onload="gamecustomization.init()">
+    <main id="texture" class="center-content">
+        <section class="content">
+            <h1 class="tittle p-4 fw-bold">PERSONALIZAR PARTIDA</h1>
+            <div class="d-flex flex-column lign-items-center content">
+                <div class="row-1">
+                    <button class="button btn" data-bs-toggle="modal" data-bs-target="#declineModalCenter">
+                        <i class="bi bi-caret-left-fill"></i><strong> VOLVER </strong>
+                    </button>
+                </div>
+                <form>
+                    <div class="mt-4 mb-4 d-flex gap-4">
+                        <div class="row d-flex flex-column mb-3">
+                            <div class="col-12 d-flex align-items-center">
+                                <h1><i class="bi bi-alarm-fill text-white"></i></h1>
+                                <span class="d-flex flex-column ms-3">
+                                    <label for="inputTime" class="form-label text-white fw-bold fs-5 m-0 text-start">Tiempo</label>
+                                    <p class="text-white m-0 text-start">Tiempo de juego</p>
+                                </span>
+                            </div>
+                            <div class="col-12">
+                                <select id="inputTime" class="form-select">
+                                    <option selected>Seleccionar...</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row d-flex flex-column align-items-center mb-3">
+                            <div class="col-12 d-flex align-items-center">
+                                <h1><i class="bi bi-aspect-ratio-fill text-white"></i></h1>
+                                <span class="d-flex flex-column ms-3">
+                                    <label for="inputSize" class="form-label text-white fw-bold fs-5 m-0 text-start">Tamaño</label>
+                                    <p class="text-white m-0 text-start">Tamaño del tablero</p>
+                                </span>
+                            </div>
+                            <div class="col-12">
+                                <select id="inputSize" class="form-select">
+                                    <option selected>Seleccionar...</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div id="dialog-alert"></div>
+                        <button type="button" class="button btn" onclick="gamecustomization.create()">
+                            <i class="bi bi-controller"></i><strong> INICIAR </strong>
+                        </button>
+                    </div>
+                </form>
+                <div class="modal fade" id="declineModalCenter" tabindex="-1" aria-labelledby="declineModalCenterTitle" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="dialog-confirm modal-content">
+                            <div class="modal-header">
+                                <h1 class="title">¿Quieres salir e ir al inicio?</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="dialog-body modal-body">
+                                <p>Saldrás de las configuraciones del jugador.</p>
+                                <p>¿Seguro que quieres continuar?</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="button btn btn-secondary" data-bs-dismiss="modal"><strong >CANCELAR</strong></button>
+                                <button id="exit" type="button" class="button btn btn-primary"><strong >SALIR</strong></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--Dialog for complete information-->
+                <div class="modal fade" id="configGameModalCenter" tabindex="-1" aria-labelledby="configGameModalCenterTitle" style="display: none;" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="dialog-confirm modal-content">
+                            <div class="modal-header">
+                                <h1 class="title">Completa la configuración</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="dialog-body modal-body">
+                                <p>Para disfrutar al máximo el juego, vuelve y completa la configuración.</p>
+                            </div>
+                            <div id="config-dialog" class="modal-footer"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

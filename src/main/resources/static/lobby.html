@@ -3,6 +3,7 @@
 <head>
     <title>Sala de espera</title>
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <meta charset="UTF-8">
     <script src="/webjars/jquery/jquery.min.js"></script>
     <script src="/webjars/bootstrap/5.3.2/js/bootstrap.min.js"></script>
     <link href="/webjars/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet"/>
@@ -20,7 +21,8 @@
     <main id="texture" class="center-content">
         <div class="content">
             <h1 class="tittle">Sala de espera</h1>
-            <h3 id="time" class="col-md center-content tittle time">Tiempo de la partida: 01:30 minutos</h3>
+            <h3 class="col-md center-content tittle">Código de sala<span id="codeRoom"></span></h3>
+            <h3 class="col-md center-content tittle time">Tiempo de la partida<span id="time"> </span></h3>
             <div id="players-row" class="content row">
                 <div id="players-list" class="col d-flex flex-column gap-3"></div>
             </div>
