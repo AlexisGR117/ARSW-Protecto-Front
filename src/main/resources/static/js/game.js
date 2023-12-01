@@ -41,23 +41,30 @@ const app = (function () {
         const color = getRGBAColor(player.color);
         newCell.css('background-color', color);
         playerCircle.appendTo(newCell);
-        const cells = data.cells;
         if (data.wildcard == "PaintPump") {
-            for (let dc = -2; dc <= 2; dc++) for (let dr = -2; dr <= 2; dr++) {
-                if (isInsideBoard(y+dr, x+dc, cells.length) && cells[x+dc][y+dr].paintedBy != null && cells[x+dc][y+dr].paintedBy.name == data.playerName) {
-                    $(`#row-${x+dc}-column-${y+dr}`).css('background-color', color);
-                }
-            }
-            newCell.find("img").remove();
+            handlePaintPump(newCell, color, data.cells, data.playerName, x, y);
         } else if (data.wildcard == "Freeze") {
-            for (const player of data.players) {
-                if(player.name != data.playerName) {
-                    $(`#${player.name}`).css('border-radius', "0%");
-                }
-            }
-            setInterval(unfreeze, 5000, data.players, data.playerName);
-            newCell.find("img").remove();
+            handleFreeze(newCell, data.players, data.playerName);
         }
+    }
+
+    function handlePaintPump(newCell, color, cells, playerName, x, y) {
+        for (let dc = -2; dc <= 2; dc++) for (let dr = -2; dr <= 2; dr++) {
+            if (isInsideBoard(y+dr, x+dc, cells.length) && cells[x+dc][y+dr].paintedBy != null && cells[x+dc][y+dr].paintedBy.name == playerName) {
+                $(`#row-${x+dc}-column-${y+dr}`).css('background-color', color);
+            }
+        }
+        newCell.find("img").remove();
+    }
+
+    function handleFreeze(newCell, players, playerName) {
+        for (const player of players) {
+            if(player.name != playerName) {
+                $(`#${player.name}`).css('border-radius', "0%");
+            }
+        }
+        setInterval(unfreeze, 5000, players, playerName);
+        newCell.find("img").remove();
     }
 
     function isInsideBoard(x, y, size) {
@@ -191,6 +198,7 @@ const app = (function () {
     }
 
     function updateTimer() {
+        let remainingTime;
         const minutes = Math.floor(remainingTime / 60);
         const seconds = remainingTime % 60;
         document.getElementById('time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
