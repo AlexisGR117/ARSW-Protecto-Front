@@ -1,4 +1,4 @@
-var index = (function () {
+let index = (function () {
     const module = apiClient;
 
     function dialogCode() {
@@ -15,7 +15,7 @@ var index = (function () {
     }
 
     function _isValidCode () {
-        var gameCode = $("#codeRoom").val();
+        let gameCode = $("#codeRoom").val();
         module.getGames().then((games) => {
             if (gameCode in games) {
                 sessionStorage.setItem('gameCode', gameCode);

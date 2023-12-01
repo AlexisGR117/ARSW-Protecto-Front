@@ -1,23 +1,23 @@
-var playercustomization = (function () {
+let playercustomization = (function () {
     const app = apiClient;
-    var gameCode;
+    let gameCode;
 
-    var _createNewPlayer = function () {
-        var name = $("#name").val();
-        var color = $("#color").val();
-        var player = {
+    let _createNewPlayer = function () {
+        let name = $("#name").val();
+        let color = $("#color").val();
+        let player = {
             name: name,
             color: color,
         };
         return player;
     };
 
-    var _getGameCode = function () {
+    let _getGameCode = function () {
         gameCode = sessionStorage.getItem("gameCode");
         return gameCode;
     };
 
-    var _playAlert = function () {
+    let _playAlert = function () {
         let player = _createNewPlayer();
         let gameCode = _getGameCode();
         const alertPlaceholder = $("#dialog-alert");

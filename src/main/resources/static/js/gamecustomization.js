@@ -1,4 +1,4 @@
-var gamecustomization = (function () {
+let gamecustomization = (function () {
     const module = apiClient;
     const boardSizeNames = {
         15: 'Pequeño',
@@ -23,12 +23,12 @@ var gamecustomization = (function () {
     };
 
     function createOptionBoardSize(boardSize) {
-        var boardSizeName = boardSizeNames[boardSize];
+        let boardSizeName = boardSizeNames[boardSize];
         $("#inputSize").append("<option value=" + boardSizeName + ">" + boardSizeName + "</option>");
     };
 
     function createOptionTime(gameTime) {
-        var gameTimeName = gameTimeNames[gameTime];
+        let gameTimeName = gameTimeNames[gameTime];
         $("#inputTime").append("<option value=" + gameTimeName + ">" + gameTimeName + "</option>");
     };
 
@@ -54,8 +54,8 @@ var gamecustomization = (function () {
     }
 
     function _createAndPlay() {
-        var boardSize = $("#inputSize").val();
-        var gameTime = $("#inputTime").val();
+        let boardSize = $("#inputSize").val();
+        let gameTime = $("#inputTime").val();
         if (!boardSize || !boardSizeNumbers[boardSize]) {
             completeGameConfig();
             return;
@@ -77,7 +77,7 @@ var gamecustomization = (function () {
             ].join("");
             alertPlaceholder.append(wrapper);
         };
-        var gameConfig = {
+        let gameConfig = {
             "boardSize": boardSizeNumbers[boardSize],
             "gameTime": gameTimeNumbers[gameTime],
         };

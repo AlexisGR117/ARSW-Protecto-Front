@@ -2,19 +2,7 @@ const apiClient = (function () {
 
     const baseURL = "https://paintitgame.azurewebsites.net";
 
-    var _getPlayersByGame = function (gameCode) {
-        let getPromise = $.ajax({
-            url: baseURL + "/games/" + gameCode + "/players",
-            type: "GET",
-            contentType: "application/json",
-            dataType: "json",
-            
-        });
-
-        return getPromise;
-    };
-
-    var _getGames = function () {
+    let _getGames = function () {
         let getPromise = $.ajax({
             url: baseURL + "/games",
             type: "GET",
@@ -25,7 +13,7 @@ const apiClient = (function () {
         return getPromise;
     };
 
-    var _getGameBoardSizes = function () {
+    let _getGameBoardSizes = function () {
         let getPromise = $.ajax({
             url: baseURL + "/games/boardsizes",
             type: "GET",
@@ -36,7 +24,7 @@ const apiClient = (function () {
         return getPromise;
     };
 
-    var _getGameTimes = function () {
+    let _getGameTimes = function () {
         let getPromise = $.ajax({
             url: baseURL + "/games/gametimes",
             type: "GET",
@@ -47,7 +35,7 @@ const apiClient = (function () {
         return getPromise;
     };
 
-    var _postGame = function (gameConfig) {
+    let _postGame = function (gameConfig) {
         let postPromise = $.ajax({
             url: baseURL + "/games",
             type: "POST",
@@ -56,23 +44,6 @@ const apiClient = (function () {
         });
         
         return postPromise;
-    };
-
-    var _postPlayer = function (gameCode, player) {
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                url: baseURL + "/games/" + gameCode + "/players",
-                type: "POST",
-                data: JSON.stringify(player),
-                contentType: "application/json",
-                success: function (data) {
-                    resolve(data);
-                },
-                error: function (error) {
-                    reject(error);
-                }
-            });
-        });
     };
 
     return {
