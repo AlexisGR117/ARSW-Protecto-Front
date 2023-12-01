@@ -1,6 +1,7 @@
 const app = (function () {
     const module = apiClient;
     let stompClient = null;
+    let remainingTime;
     let gameCode = sessionStorage.getItem("gameCode")
     let currentPlayer = {name: sessionStorage.getItem('player')};
 
@@ -198,7 +199,6 @@ const app = (function () {
     }
 
     function updateTimer() {
-        let remainingTime;
         const minutes = Math.floor(remainingTime / 60);
         const seconds = remainingTime % 60;
         document.getElementById('time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
