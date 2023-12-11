@@ -50,4 +50,4 @@ jobs:
           app-name: 'paintitfront'
           slot-name: 'Production'
           package: '*.jar'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_32F9A98F34924E2691D347F71072ECC6 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_4F41A44D2FAE4555853C8E51EA5BCD06 }}
