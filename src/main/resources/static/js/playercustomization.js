@@ -35,13 +35,29 @@ let playercustomization = (function () {
         app.postPlayerApp(gameCode, player).then(function (data) {
             sessionStorage.setItem("player", $("#name").val());
             location.href = "lobby.html";
+            stompClient.send("/app/newplayer." + gameCode);
         }).catch(function (error) {
             appendAlert(error.responseText, "light");
         });
     };
 
+    function connect() {
+        console.info('Connecting to WS...');
+        const socket = new SockJS('http://paintitgateway.eastus.cloudapp.azure.com/stompendpoint');
+        stompClient = Stomp.over(socket);
+        const keepAliveInterval = setInterval(() => {
+                if (stompClient && stompClient.connected) {
+                    stompClient.send("/keepalive", {});
+                }
+            }, 18000);
+        stompClient.connect({}, (frame) => {
+            console.log('Connected: ' + frame);
+        });
+    };
+
     return {
         init: function () {
+            connect();
             $("#exit").click(function () {
                 location.href = "index.html";
             });

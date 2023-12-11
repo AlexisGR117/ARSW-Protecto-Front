@@ -1,6 +1,6 @@
 const apiClient = (function () {
 
-    const baseURL = "https://paintitgame.azurewebsites.net";
+    const baseURL = "http://paintitgateway.eastus.cloudapp.azure.com";
 
     let _getGames = function () {
         let getPromise = $.ajax({

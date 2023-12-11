@@ -3,7 +3,11 @@ const app = (function () {
     let stompClient = null;
     let gameCode;
     let player;
-
+    const gameTimeNames = {
+        1: 'Rápida',
+        1.5: 'Normal',
+        2: 'Lenta'
+    };
     function setParameters() {
         gameCode = sessionStorage.getItem("gameCode");
         player = sessionStorage.getItem("player");
@@ -37,8 +41,13 @@ const app = (function () {
 
     function connectAndSubscribe() {
         console.info('Connecting to WS...');
-        const socket = new SockJS('https://paintitgame.azurewebsites.net/stompendpoint');
+        const socket = new SockJS('http://paintitgateway.eastus.cloudapp.azure.com/stompendpoint');
         stompClient = Stomp.over(socket);
+        const keepAliveInterval = setInterval(() => {
+                if (stompClient && stompClient.connected) {
+                    stompClient.send("/keepalive", {});
+                }
+            }, 18000);
         stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             stompClient.subscribe(`/topic/newplayer.${gameCode}`, (eventbody) => {
@@ -49,7 +58,6 @@ const app = (function () {
             stompClient.subscribe(`/topic/startgame.${gameCode}`, (eventbody) => {
                 location.href = "game.html";
             });
-
         });
     };
 
@@ -88,9 +96,8 @@ const app = (function () {
     };
 
     function setTime(remainingTime) {
-        const minutes = Math.floor(remainingTime / 60);
-        const seconds = remainingTime % 60;
-        $('#time').text(`: ${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`);
+        const time = gameTimeNames[remainingTime];
+        $('#time').text(`Partida ${time}`);
     };
     
     function setCodeRoom() {
@@ -100,7 +107,6 @@ const app = (function () {
     function init() {
         setParameters();
         connectAndSubscribe();
-
         module.getPlayersByGameApp(gameCode)
             .then((players) => {
                 createPlayersElements(players);

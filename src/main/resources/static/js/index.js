@@ -20,6 +20,8 @@ let index = (function () {
             if (gameCode in games) {
                 sessionStorage.setItem('gameCode', gameCode);
                 location.href = 'playercustomization.html';
+            } else {
+                dialogCode();
             }
         }).catch(function (error) {
             dialogCode();

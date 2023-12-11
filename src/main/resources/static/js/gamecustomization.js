@@ -6,9 +6,9 @@ let gamecustomization = (function () {
         25: 'Grande'
     };
     const gameTimeNames = {
-        30: 'Rápido',
-        60: 'Normal',
-        120: 'Lento'
+        1: 'Rápido',
+        1.5: 'Normal',
+        2: 'Lento'
     };
     const boardSizeNumbers = {
         'Pequeño': 15,
@@ -17,9 +17,9 @@ let gamecustomization = (function () {
     };
     
     const gameTimeNumbers = {
-        'Rápido': 30,
-        'Normal': 60,
-        'Lento': 120
+        'Rápido': 1,
+        'Normal': 1.5,
+        'Lento': 2
     };
 
     function createOptionBoardSize(boardSize) {

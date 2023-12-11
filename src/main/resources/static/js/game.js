@@ -4,6 +4,7 @@ const app = (function () {
     let remainingTime;
     let gameCode = sessionStorage.getItem("gameCode")
     let currentPlayer = {name: sessionStorage.getItem('player')};
+    let freeze = false;
 
     function createPlayerElement(player) {
         const { name, score, color } = player;
@@ -35,8 +36,8 @@ const app = (function () {
 
     function paintCell(data) {
         const player = data.players.find((player) => player.name === data.playerName);
-        const x = data.movement.x;
-        const y = data.movement.y;
+        const x = data.x;
+        const y = data.y;
         const newCell = $(`#row-${x}-column-${y}`);
         const playerCircle =  $(`#${data.playerName}`);
         const color = getRGBAColor(player.color);
@@ -64,7 +65,7 @@ const app = (function () {
                 $(`#${player.name}`).css('border-radius', "0%");
             }
         }
-        setInterval(unfreeze, 5000, players, playerName);
+        freeze = true;
         newCell.find("img").remove();
     }
 
@@ -78,6 +79,7 @@ const app = (function () {
                 $(`#${player.name}`).css('border-radius', "50%");
             }
         }
+        freeze = false;
     }
 
     function placeWildcards(cells) {
@@ -109,25 +111,22 @@ const app = (function () {
 
     function connectAndSubscribe() {
         console.info('Connecting to WS...');
-        const socket = new SockJS('https://paintitgame.azurewebsites.net/stompendpoint');
+        const socket = new SockJS('http://paintitgateway.eastus.cloudapp.azure.com/stompendpoint');
         stompClient = Stomp.over(socket);
+updateGame
         stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
-            stompClient.subscribe(`/topic/updatescore.${gameCode}`, (eventbody) => {
-                const players = JSON.parse(eventbody.body);
-                createPlayersElements(players);
-            });
             stompClient.subscribe(`/topic/updateboard.${gameCode}`, (eventbody) => {
                 const data = JSON.parse(eventbody.body);
                 paintCell(data);
+                createPlayersElements(data.players);
+                placeWildcards(data.cellsWithWildcards);
+                updateRemainingMoves(data.remainingMoves);
+                if (freeze && data.remainingFrozenMoves <= 0) unfreeze(data.players, data.playerName);
             });
             stompClient.subscribe(`/topic/gamefinished.${gameCode}`, (eventbody) => {
                 const winner = eventbody.body;
                 placeWinner(winner);
-            });
-            stompClient.subscribe(`/topic/updatewildcards.${gameCode}`, (eventbody) => {
-                const cells = JSON.parse(eventbody.body);
-                placeWildcards(cells);
             });
         });
     }
@@ -139,13 +138,14 @@ const app = (function () {
         console.log("Disconnected");
     };
 
-    function movePlayer(x, y) {
+    function movePlayer(row, column) {
         const data = {
             playerName: currentPlayer.name,
-            movement: { x, y },
+            x: row,
+            y: column,
             wildcard: null
         };
-        const cell = $(`#row-${x}-column-${y}`);
+        const cell = $(`#row-${row}-column-${column}`);
         if (cell.children().first().hasClass("Freeze")) data.wildcard = "Freeze";
         else if (cell.children().first().hasClass("PaintPump")) data.wildcard = "PaintPump";
         stompClient.send("/app/newmovement." + gameCode, {}, JSON.stringify(data));
@@ -198,19 +198,10 @@ const app = (function () {
         }
     }
 
-    function updateTimer() {
-        const minutes = Math.floor(remainingTime / 60);
-        const seconds = remainingTime % 60;
-        document.getElementById('time').textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-        if (remainingTime === 30) {
-            document.getElementById('message').style.visibility = 'visible';
-        }
-        if (remainingTime === 25) {
-            document.getElementById('message').style.visibility = 'hidden';
-        }
-        if (remainingTime > 0) {
-            remainingTime--;
-        }
+    function updateRemainingMoves(remainingMoves) {
+        $('#moves').text(remainingMoves);
+        if (remainingMoves === 50) $("#message").css("visibility", "visible");
+        if (remainingMoves === 30) $("#message").css("visibility", "hidden");
     }
 
     function init() {
@@ -221,9 +212,9 @@ const app = (function () {
                 createBoard(game);
                 createPlayersElements(game.players);
                 remainingTime = game.duration;
+                updateRemainingMoves(game.remainingMoves);
             });
         keyDownEvents();
-        setInterval(updateTimer, 1000);    
     }
 
     return {
