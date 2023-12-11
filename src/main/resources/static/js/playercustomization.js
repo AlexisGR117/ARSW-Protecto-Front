@@ -1,6 +1,7 @@
 let playercustomization = (function () {
     const app = apiClient;
     let gameCode;
+    let stompClient = null;
 
     let _createNewPlayer = function () {
         let name = $("#name").val();
@@ -44,7 +45,7 @@ let playercustomization = (function () {
     function connect() {
         console.info('Connecting to WS...');
         const socket = new SockJS('http://paintitgateway.eastus.cloudapp.azure.com/stompendpoint');
-        const stompClient = Stomp.over(socket);
+        stompClient = Stomp.over(socket);
         setInterval(() => {
             if (stompClient?.connected) {
                 stompClient.send("/keepalive", {});
