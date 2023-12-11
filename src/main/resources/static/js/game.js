@@ -1,7 +1,6 @@
 const app = (function () {
     const module = apiClient;
     let stompClient = null;
-    let remainingTime;
     let gameCode = sessionStorage.getItem("gameCode")
     let currentPlayer = {name: sessionStorage.getItem('player')};
     let freeze = false;
