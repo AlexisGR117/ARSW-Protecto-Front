@@ -113,7 +113,6 @@ const app = (function () {
         console.info('Connecting to WS...');
         const socket = new SockJS('http://paintitgateway.eastus.cloudapp.azure.com/stompendpoint');
         stompClient = Stomp.over(socket);
-updateGame
         stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
             stompClient.subscribe(`/topic/updateboard.${gameCode}`, (eventbody) => {
@@ -211,7 +210,6 @@ updateGame
                 console.log(game.players);
                 createBoard(game);
                 createPlayersElements(game.players);
-                remainingTime = game.duration;
                 updateRemainingMoves(game.remainingMoves);
             });
         keyDownEvents();

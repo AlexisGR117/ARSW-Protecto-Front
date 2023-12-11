@@ -44,12 +44,12 @@ let playercustomization = (function () {
     function connect() {
         console.info('Connecting to WS...');
         const socket = new SockJS('http://paintitgateway.eastus.cloudapp.azure.com/stompendpoint');
-        stompClient = Stomp.over(socket);
-        const keepAliveInterval = setInterval(() => {
-                if (stompClient && stompClient.connected) {
-                    stompClient.send("/keepalive", {});
-                }
-            }, 18000);
+        const stompClient = Stomp.over(socket);
+        setInterval(() => {
+            if (stompClient?.connected) {
+                stompClient.send("/keepalive", {});
+            }
+        }, 18000);
         stompClient.connect({}, (frame) => {
             console.log('Connected: ' + frame);
         });
